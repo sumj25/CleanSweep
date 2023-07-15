@@ -4,10 +4,8 @@ export const productSlice = createSlice({
   name: "product",
   initialState: {
     product: [],
-    first: "op",
   },
   reducers: {
-    //get all products
     getProducts: (state, action) => {
       state.product.push({ ...action.payload });
     },
