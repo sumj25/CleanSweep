@@ -1,7 +1,10 @@
 import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const DressItem = ({ item }) => {
+  const dispatch = useDispatch();
+
   return (
     <View>
       <Pressable

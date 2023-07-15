@@ -16,6 +16,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import Carousel from "../component/Carousel";
 import Services from "../component/Services";
 import DressItem from "../component/DressItem";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../redux/reducer/ProductReducer";
 
 const HomeScreen = () => {
   const [displayCurrentAddress, setdisplayCurrentAddress] = useState(
@@ -66,7 +68,7 @@ const HomeScreen = () => {
     }
 
     const { coords } = await Location.getCurrentPositionAsync();
-    // console.log(coords) gives longitute and latitude
+    // console.log(coords) gives longitute and latitude basicall co-ordinate
     if (coords) {
       const { latitude, longitude } = coords;
 
@@ -83,6 +85,17 @@ const HomeScreen = () => {
       }
     }
   };
+  const product = useSelector((state) => state.product.product);
+  const dispatch = useDispatch();
+  //console.log(product);
+  useEffect(() => {
+    if (product.length > 0) return;
+
+    const fetchProducts = async () => {
+      services.map((service) => dispatch(getProducts(service)));
+    };
+    fetchProducts();
+  }, []);
   const services = [
     {
       id: "0",
@@ -164,7 +177,7 @@ const HomeScreen = () => {
       {/* Image Carousel */}
       <Carousel />
       <Services />
-      {services.map((item, index) => (
+      {product.map((item, index) => (
         <DressItem item={item} key={index} />
       ))}
     </ScrollView>
