@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,7 +9,6 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
 import HorizontalDatepicker from "@awrminkhodaei/react-native-horizontal-datepicker";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -99,145 +99,157 @@ const PickUpScreen = () => {
   return (
     <>
       <SafeAreaView>
-        <Text style={{ fontSize: 16, fontWeight: "500", marginHorizontal: 10 }}>
-          enter Address
-        </Text>
-        <TextInput
-          style={{
-            padding: 40,
-            borderColor: "gray",
-            borderWidth: 0.7,
-            paddingVertical: 80,
-            borderRadius: 9,
-            margin: 10,
-          }}
-        />
+        <View style={{ marginTop: 50 }}>
+          <Text style={styles.label}>Enter Address</Text>
+          <TextInput style={styles.input} />
 
-        <Text style={{ fontSize: 16, fontWeight: "500", marginHorizontal: 10 }}>
-          Pick Up Date
-        </Text>
-        <HorizontalDatepicker
-          mode="gregorian"
-          startDate={new Date("2023-02-21")}
-          endDate={new Date("2023-02-28")}
-          initialSelectedDate={new Date("2020-08-22")}
-          onSelectedDateChange={(date) => setSelectedDate(date)}
-          selectedItemWidth={170}
-          unselectedItemWidth={38}
-          itemHeight={38}
-          itemRadius={10}
-          selectedItemTextStyle={styles.selectedItemTextStyle}
-          unselectedItemTextStyle={styles.selectedItemTextStyle}
-          selectedItemBackgroundColor="#222831"
-          unselectedItemBackgroundColor="#ececec"
-          flatListContainerStyle={styles.flatListContainerStyle}
-        />
+          <Text style={styles.label}>Pick Up Date</Text>
+          <HorizontalDatepicker
+            mode="gregorian"
+            startDate={new Date("2023-02-21")}
+            endDate={new Date("2023-02-28")}
+            initialSelectedDate={new Date("2020-08-22")}
+            onSelectedDateChange={(date) => setSelectedDate(date)}
+            selectedItemWidth={170}
+            unselectedItemWidth={38}
+            itemHeight={38}
+            itemRadius={10}
+            selectedItemTextStyle={styles.selectedItemTextStyle}
+            unselectedItemTextStyle={styles.selectedItemTextStyle}
+            selectedItemBackgroundColor="#222831"
+            unselectedItemBackgroundColor="#ececec"
+            flatListContainerStyle={styles.flatListContainerStyle}
+          />
 
-        <Text style={{ fontSize: 16, fontWeight: "500", marginHorizontal: 10 }}>
-          Select Time
-        </Text>
+          <Text style={styles.label}>Select Time</Text>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {times.map((item, index) => (
-            <Pressable
-              key={index}
-              onPress={() => setSelectedTime(item.time)}
-              style={
-                selectedTime.includes(item.time)
-                  ? {
-                      margin: 10,
-                      borderRadius: 7,
-                      padding: 15,
-                      borderColor: "red",
-                      borderWidth: 0.7,
-                    }
-                  : {
-                      margin: 10,
-                      borderRadius: 7,
-                      padding: 15,
-                      borderColor: "gray",
-                      borderWidth: 0.7,
-                    }
-              }
-            >
-              <Text>{item.time}</Text>
-            </Pressable>
-          ))}
-        </ScrollView>
-        <Text style={{ fontSize: 16, fontWeight: "500", marginHorizontal: 10 }}>
-          Delivery Date
-        </Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {times.map((item, index) => (
+              <Pressable
+                key={index}
+                onPress={() => setSelectedTime(item.time)}
+                style={[
+                  styles.timeButton,
+                  selectedTime.includes(item.time)
+                    ? styles.selectedTimeButton
+                    : styles.unselectedTimeButton,
+                ]}
+              >
+                <Text style={styles.timeButtonText}>{item.time}</Text>
+              </Pressable>
+            ))}
+          </ScrollView>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {deliveryTime.map((item, i) => (
-            <Pressable
-              style={
-                delivery.includes(item.name)
-                  ? {
-                      margin: 10,
-                      borderRadius: 7,
-                      padding: 15,
-                      borderColor: "red",
-                      borderWidth: 0.7,
-                    }
-                  : {
-                      margin: 10,
-                      borderRadius: 7,
-                      padding: 15,
-                      borderColor: "gray",
-                      borderWidth: 0.7,
-                    }
-              }
-              onPress={() => setDelivery(item.name)}
-              key={i}
-            >
-              <Text>{item.name}</Text>
-            </Pressable>
-          ))}
-        </ScrollView>
+          <Text style={styles.label}>Delivery Date</Text>
+
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {deliveryTime.map((item, i) => (
+              <Pressable
+                key={i}
+                onPress={() => setDelivery(item.name)}
+                style={[
+                  styles.deliveryButton,
+                  delivery.includes(item.name)
+                    ? styles.selectedDeliveryButton
+                    : styles.unselectedDeliveryButton,
+                ]}
+              >
+                <Text style={styles.deliveryButtonText}>{item.name}</Text>
+              </Pressable>
+            ))}
+          </ScrollView>
+        </View>
       </SafeAreaView>
 
       {total === 0 ? null : (
-        <Pressable
-          style={{
-            backgroundColor: "#088F8F",
-            marginTop: "auto",
-            padding: 10,
-            marginBottom: 40,
-            margin: 15,
-            borderRadius: 7,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
+        <Pressable style={styles.cartButton} onPress={proceedToCart}>
           <View>
-            <Text style={{ fontSize: 17, fontWeight: "600", color: "white" }}>
+            <Text style={styles.cartButtonText}>
               {cart.length} items | $ {total}
             </Text>
-            <Text
-              style={{
-                fontSize: 15,
-                fontWeight: "400",
-                color: "white",
-                marginVertical: 6,
-              }}
-            >
+            <Text style={styles.cartButtonSubText}>
               extra charges might apply
             </Text>
           </View>
 
-          <Pressable onPress={proceedToCart}>
-            <Text style={{ fontSize: 17, fontWeight: "600", color: "white" }}>
-              Proceed to Cart
-            </Text>
-          </Pressable>
+          <Text style={styles.proceedButtonText}>Proceed to Cart</Text>
         </Pressable>
       )}
     </>
   );
 };
 
-export default PickUpScreen;
+const styles = StyleSheet.create({
+  label: {
+    fontSize: 16,
+    fontWeight: "500",
+    marginHorizontal: 10,
+  },
+  input: {
+    padding: 40,
+    borderColor: "gray",
+    borderWidth: 0.7,
+    paddingVertical: 80,
+    borderRadius: 9,
+    margin: 10,
+  },
+  selectedItemTextStyle: {},
+  flatListContainerStyle: {},
+  timeButton: {
+    margin: 10,
+    borderRadius: 7,
+    padding: 15,
+    borderColor: "gray",
+    borderWidth: 0.7,
+  },
+  selectedTimeButton: {
+    backgroundColor: "gray",
+  },
+  unselectedTimeButton: {
+    borderColor: "gray",
+  },
+  timeButtonText: {},
+  deliveryButton: {
+    margin: 10,
+    borderRadius: 7,
+    padding: 15,
+    borderColor: "gray",
+    borderWidth: 0.7,
+  },
+  selectedDeliveryButton: {
+    backgroundColor: "red",
+  },
+  unselectedDeliveryButton: {
+    borderColor: "gray",
+  },
+  deliveryButtonText: {},
+  cartButton: {
+    backgroundColor: "#088F8F",
+    marginTop: "auto",
+    padding: 10,
+    marginBottom: 40,
+    margin: 15,
+    borderRadius: 7,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  cartButtonText: {
+    fontSize: 17,
+    fontWeight: "600",
+    color: "white",
+  },
+  cartButtonSubText: {
+    fontSize: 15,
+    fontWeight: "400",
+    color: "white",
+    marginVertical: 6,
+  },
+  proceedButtonText: {
+    fontSize: 17,
+    fontWeight: "600",
+    color: "white",
+  },
+});
 
-const styles = StyleSheet.create({});
+export default PickUpScreen;
